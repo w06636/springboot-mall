@@ -4,9 +4,9 @@ import com.demo.springbootmall.dao.ProductDao;
 import com.demo.springbootmall.model.Product;
 import com.demo.springbootmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
