@@ -1,9 +1,11 @@
 package com.demo.springbootmall.dao.impl;
 
+import com.demo.springbootmall.constant.ProductCategory;
 import com.demo.springbootmall.dao.ProductDao;
 import com.demo.springbootmall.dto.ProductRequest;
 import com.demo.springbootmall.model.Product;
 import com.demo.springbootmall.rowmapper.ProductRowMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -11,16 +13,31 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class ProductDaoImpl implements ProductDao {
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    @Override
+    public List<Product> getProducts(ProductCategory productCategory, String search) {
+
+        String sql = "select product_id, product_name, category, image_url, price, stock, " +
+                "description, create_date, last_modified_date from product where 1 = 1";
+
+        Map<String, Object> map = new HashMap<>();
+        if (productCategory != null) {
+            sql += " and category = :category";
+            map.put("category", productCategory.name());
+        }
+        if (StringUtils.isNotBlank(search)) {
+            sql += " and product_name like :search";
+            map.put("search", "%" + search + "%");
+        }
+        return namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
+    }
 
     @Override
     public Product getProductById(Integer productId) {
@@ -61,7 +78,7 @@ public class ProductDaoImpl implements ProductDao {
         KeyHolder keyHolder = new GeneratedKeyHolder(); // 儲存資料庫自動生成的product id
         namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(map), keyHolder);
 
-        return keyHolder.getKey().intValue();
+        return Objects.requireNonNull(keyHolder.getKey(), "key is null").intValue();
     }
 
     @Override
