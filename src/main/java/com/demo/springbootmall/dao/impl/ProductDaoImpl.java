@@ -43,6 +43,9 @@ public class ProductDaoImpl implements ProductDao {
             map.put("search", "%" + search + "%");
         }
         sql += " order by " + orderBy + " " + sort;
+        sql += " limit :limit offset :offset"; // 跳過前(offset)筆，取得(limit)筆
+        map.put("limit", productQueryParams.getLimit());
+        map.put("offset", productQueryParams.getOffset());
 
         return namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
     }

@@ -7,15 +7,19 @@ import com.demo.springbootmall.model.Product;
 import com.demo.springbootmall.service.ProductService;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated // 有用到@Max跟@Min時須加上此annotation
 @RestController
 public class ProductController {
 
@@ -29,13 +33,17 @@ public class ProductController {
             @RequestParam(required = false) ProductCategory category, // 參數可選填
             @RequestParam(required = false) String search,
             @RequestParam(defaultValue = "create_date") String orderBy, // 商品排序，預設依create_date排序
-            @RequestParam(defaultValue = "desc") String sort // 升序or降序，預設desc
+            @RequestParam(defaultValue = "desc") String sort, // 升序or降序，預設desc
+            @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit, // 分頁，取得幾筆(最大1000最小0)
+            @RequestParam(defaultValue = "0") @Min(0) Integer offset // 分頁，跳過幾筆(最小0)
     ) {
         ProductQueryParams productQueryParams = new ProductQueryParams();
         productQueryParams.setCategory(category);
         productQueryParams.setSearch(search);
         productQueryParams.setOrderBy(orderBy);
         productQueryParams.setSort(sort);
+        productQueryParams.setLimit(limit);
+        productQueryParams.setOffset(offset);
 
         List<Product> productList = productService.getProducts(productQueryParams);
 
