@@ -5,7 +5,6 @@ import com.demo.springbootmall.dao.ProductQueryParams;
 import com.demo.springbootmall.dto.ProductRequest;
 import com.demo.springbootmall.model.Product;
 import com.demo.springbootmall.service.ProductService;
-
 import com.demo.springbootmall.util.Page;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
