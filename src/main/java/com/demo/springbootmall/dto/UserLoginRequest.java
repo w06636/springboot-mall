@@ -3,14 +3,14 @@ package com.demo.springbootmall.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public class UserRegisterRequest {
+public class UserLoginRequest {
 
     @NotBlank
     @Email
-    private String email;
+    String email;
 
     @NotBlank
-    private String password;
+    String password;
 
     public String getEmail() {
         return email;
