@@ -10,3 +10,12 @@ create table if not exists product
     create_date         timestamp          not null,
     last_modified_date  timestamp          not null
 );
+
+create table if not exists user
+(
+	user_id               int           not null primary key auto_increment,
+    email                 varchar(256)  not null unique,
+    password              varchar(256)  not null,
+    create_date           timestamp     not null,
+    last_modified_date    timestamp     not null
+);
